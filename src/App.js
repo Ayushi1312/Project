@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Table from './Table';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+    state = {
+        data: [],
+        total: null
+    }
+    render() {
+        return (
+            <Table data={this.state.data} fetchData={this.fetchData} total={this.state.total}/>
+        );
+
+
+    }
+    componentDidMount() {
+        this.fetchData(1);
+    }
+    fetchData = (pageNumber) => {
+        var url = "http://www.omdbapi.com/?s=iron&apikey=c7e2df9&page=" + pageNumber;
+        fetch(url).then(res => res.json()).then(res => {
+            this.setState({ data: res.Search, total: res.totalResults})
+        })
+    }
 }
 
 export default App;
+
+
